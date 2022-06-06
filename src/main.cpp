@@ -130,21 +130,19 @@ void desligarAlarme()
 }
 
 
-void callback(char* topic, byte* payload, unsigned int length) {
-
-  //Armazenando mensagem recebida em uma string
-  payload[length] = '\0';
-  strMSG = String((char*)payload);
-
-#ifdef DEBUG
-  Serial.print("Mensagem chegou do tópico: ");
-  Serial.println(topic);
-  Serial.print("Mensagem:");
-  Serial.print(strMSG);
-  Serial.println();
-  Serial.println("-----------------------");
-#endif
-
+void callback(char *topic, byte *payload, unsigned int length) {
+    Serial.print("Message arrived in topic: ");
+    Serial.println(topic);
+    Serial.print("Message:");
+    String message;
+    for (int i = 0; i < length; i++) {
+        message = message + (char) payload[i];  // convert *byte to string
+    }
+    Serial.print(message);
+    if (message == "on") { ligarAlarme }   // LED on
+    if (message == "off") { desligarAlarme } // LED off
+    Serial.println();
+    Serial.println("-----------------------");
 }
 
 //Função pra reconectar ao servidor MQTT
